@@ -24,7 +24,7 @@ void execute_input(char *user_input)
 	}
 
 	/* Tokenize the user input into command and arguments */
-	token = strtok(user_input, "	");
+	token = strtok(user_input, " ");
 	if (token == NULL)
 	{
 		return; /* Empty input, nothing to execute */
@@ -37,15 +37,17 @@ void execute_input(char *user_input)
 	{
 		/* Handle "exit" command */
 		exit(EXIT_SUCCESS);
-	}
-	else if (strcmp(command, "env") == 0)
+		
+	} else if (strcmp(command, "env") == 0)
 	{
 		/* Handle "env" command */
 		env = getenv("PATH");
-		while (env)
+		if (env != NULL)
 		{
-			our_printf("%s\n", *env);
-			env++;
+			our_printf("%s\n", env);
+		} else
+		{
+			our_printf("PATH environment variable not found\n");
 		}
 		return;
 	}
@@ -82,7 +84,7 @@ void execute_input(char *user_input)
 				args[i++] = (char *)command; /* The first argument is the command */
 
 				/* Copy the remaining arguments into the args array */
-				while ((token = strtok(NULL, "	")) != NULL && i < 255)
+				while ((token = strtok(NULL, " ")) != NULL && i < 255)
 				{
 					args[i++] = token;
 				}
