@@ -18,6 +18,7 @@ void execute_input(char *user_input)
 
 	/* Remove trailing newline character if present */
 	size_t len = strlen(user_input);
+
 	if (user_input[len - 1] == '\n')
 	{
 		user_input[len - 1] = '\0';

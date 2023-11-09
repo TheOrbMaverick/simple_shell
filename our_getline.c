@@ -14,7 +14,7 @@ char *simple_getline(FILE *input_stream)
 	ssize_t read;
 	size_t buf_size;
 
-	/* Initialize 'line_input' to NULL to ensure proper memory allocation by getline. */
+	/* Initialize 'line_input' to NULL for proper memory allocation by getline. */
 	line_input = NULL;
 	buf_size = 0;
 
