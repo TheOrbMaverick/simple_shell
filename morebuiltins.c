@@ -18,17 +18,21 @@ int func_builtin_commands(char **args, int nof_args, char *val_put, char **env)
 {
 	if (strcmp(args[0], "exit") == 0)
 	{
+		 /* Execute 'exit' command */
 		return (hell_exit(args, val_put));
 	}
 	else if (strcmp(args[0], "env") == 0)
 	{
+		/* Execute 'env' command */
 		simple_env(env);
 		return (1);
 	}
 	else if (strcmp(args[0], "cd") == 0)
 	{
+		/* Execute 'cd' command */
 		simple_cd(args, nof_args);
 		return (1);
 	}
+	/* No built-in command executed */
 	return (0);
 }
