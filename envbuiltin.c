@@ -2,16 +2,19 @@
 
 /**
  * simple_env - A function that prints environment variables
- * henv: The argument - represents an array of strings
+ * @env: The argument - represents an array of strings
  */
 
-void simple_env(char **henv)
+void simple_env(char **env)
 {
 	/* Iterate through the environment variable until it is NULL*/
-	while (*henv != NULL)
+	while (*env != NULL)
 	{
-		write(1, *henv, strlen(*henv));
+		/* Print the current environment variable. */
+		write(1, *env, strlen(*env));
+		/* Print a newline character to separate the variables. */
 		write(1, "\n", 1);
-		henv++;
+		/* Move to the next environment variable. */
+		env++;
 	}
 }
