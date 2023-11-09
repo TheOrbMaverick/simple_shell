@@ -19,6 +19,8 @@ void execute_input(char *user_input);
 char *ourhash_comment(char *input_string);
 char *simple_getline(FILE *input_stream);
 void simple_cd(char **args, int nof_args);
-void simple_env(char **henv);
+void simple_env(char **env);
+int hell_exit(char **args, char *val_put);
+int func_builtin_commands(char **args, int nof_args, char *val_put, char **env);
 
 #endif
