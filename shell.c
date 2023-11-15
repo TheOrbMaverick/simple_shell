@@ -9,18 +9,18 @@
  * Return: Always returns 0.
  */
 
-int main(void)
+int main(int argc, char *argv[], char **env)
 {
-	char user_input[256];
+	char *input_buffer;
+	(void)argc;
 
 	while (1)
 	{
-		/* Display the custom shell prompt */
 		user_prompt();
-		/* Read user input */
-		read_input(user_input, sizeof(user_input));
-		/* Execute the user input as a command */
-		execute_input(user_input);
+		input_buffer = read_input();
+		execute_input(input_buffer, argv, env);
+		free(input_buffer);
 	}
+
 	return (0);
 }

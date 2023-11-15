@@ -8,25 +8,43 @@
  * Returns: No return value.
  */
 
-void read_input(char *user_input, size_t size)
+int tokenizer(char *input, char *args[])
 {
-	/* Read user input from stdin */
-	if (fgets(user_input, size, stdin) == NULL)
+	char *token;
+	int i;
+
+	i = 0;
+	token = strtok(input, " \n");
+
+	while (token)
 	{
-		/* Check if an enf-of-file condition is encountered */
-		if (feof(stdin))
-		{
-			/* Display a newline to improve output formatting */
-			our_printf("\n");
-			/* Exit program with a success status */
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			/* Handle input error and prompt user to retry */
-			our_printf("Input error please retry.");
-			/* Exit program with failure status */
-			exit(EXIT_FAILURE);
-		}
+		args[i] = token;
+		token = strtok(NULL, " \n");
+		i++;
 	}
+
+	args[i] = NULL;
+	return (i);
+}
+
+
+char *read_input(void)
+{
+	size_t buf_size;
+	ssize_t nread;
+	char *buffer;
+
+	buffer = NULL;
+	buf_size = 0;
+	nread = getline(&buffer, &buf_size, stdin);
+
+	if (nread == -1)
+	{
+		free(buffer);
+		exit(0);
+	}
+
+	buffer = ourhash_comment(buffer);
+
+	return (buffer);
 }
