@@ -9,44 +9,45 @@
  */
 int tokenizer(char *input, char *args[])
 {
-    char *token;
-    int i;
+	char *token;
+	int i;
 
-    i = 0;
-    token = strtok(input, " \n");
+	i = 0;
+	token = strtok(input, " \n");
 
-    while (token)
-    {
-        args[i] = token;
-        token = strtok(NULL, " \n");
-        i++;
-    }
+	while (token)
+	{
+		args[i] = token;
+		token = strtok(NULL, " \n");
+		i++;
+	}
 
-    args[i] = NULL;
-    return i;
+	args[i] = NULL;
+	return i;
 }
 
 /**
  * read_input - Read user input into a buffer.
+ *
  * Returns: A pointer to the user input buffer.
  */
 char *read_input(void)
 {
-    size_t buf_size;
-    ssize_t nread;
-    char *buffer;
+	size_t buf_size;
+	ssize_t nread;
+	char *buffer;
 
-    buffer = NULL;
-    buf_size = 0;
-    nread = getline(&buffer, &buf_size, stdin);
+	buffer = NULL;
+	buf_size = 0;
+	nread = getline(&buffer, &buf_size, stdin);
 
-    if (nread == -1)
-    {
-        free(buffer);
-        exit(0);
-    }
+	if (nread == -1)
+	{
+		free(buffer);
+		exit(0);
+	}
 
-    buffer = ourhash_comment(buffer);
+	buffer = ourhash_comment(buffer);
 
-    return buffer;
+	return buffer;
 }

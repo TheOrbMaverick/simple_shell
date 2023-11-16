@@ -11,7 +11,7 @@
  *
  * Returns: On success, the full path of the command. On failure, NULL.
  */
-char *f_path(const char *name) 
+char *f_path(const char *name)
 {
 	char *main_path;
 	char *complete_path;

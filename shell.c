@@ -11,19 +11,18 @@
  *
  * Return: Always returns 0.
  */
-
 int main(int argc, char *argv[], char **env)
 {
-    char *buffer;
-    (void)argc;
+	char *buffer;
+	(void)argc;
 
-    while (1)
-    {
-        user_prompt();
-        buffer = read_input();
-        execute_input(buffer, argv, env);
-        free(buffer);
-    }
+	while (1)
+	{
+		user_prompt();
+		buffer = read_input();
+		execute_input(buffer, argv, env);
+		free(buffer);
+	}
 
-    return (0);
+	return (0);
 }
