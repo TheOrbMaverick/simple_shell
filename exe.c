@@ -85,5 +85,5 @@ int main(void)
 	}
 
 	printf("Exiting shell.\n");
-	return 0;
+	return (0);
 }
