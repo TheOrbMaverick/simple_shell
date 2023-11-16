@@ -9,5 +9,5 @@
 void user_prompt(void)
 {
 	/* Call this function to display the shell prompt */
-	our_printf("($) ");
+	our_printf("$ ");
 }
