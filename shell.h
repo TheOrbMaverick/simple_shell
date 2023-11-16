@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <string.h>
+#include <stdarg.h>
 
 /* Function Prototypes*/
 void user_prompt(void);
