@@ -11,6 +11,7 @@
  *
  * Returns: On success, the full path of the command. On failure, NULL.
  */
+
 char *f_path(const char *name)
 {
 	char *main_path;
@@ -36,7 +37,7 @@ char *f_path(const char *name)
 		write(2, ": command not found\n", 19);
 		return (NULL);
 	}
-
+	/* returns the complete path*/
 	return (complete_path);
 }
 
@@ -48,12 +49,14 @@ char *f_path(const char *name)
  *
  * Returns: 1 if the string starts with a forward slash, otherwise 0.
  */
+
 int forward_slash(const char *str)
 {
-	if (str != NULL || str[0] == '/')
+	if (str != NULL && str[0] == '/')
 	{
+		/* returns success forward slash */
 		return (1);
 	}
-
+	/* exits if there it does not begin with forward slash*/
 	return (0);
 }
