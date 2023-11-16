@@ -1,1 +1,0 @@
-Creating a simple shell project with my partner.
