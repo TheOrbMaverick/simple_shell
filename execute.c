@@ -11,59 +11,58 @@
  * process to complete before returning.
  */
 
-void execute_input(char *user_input, char *argv[], char **env)
-{
-	/* Declare variables */
-	char *path, *args[10], *shell;
-	pid_t baby_pid;
-	int stat, numofargs;
+void execute_input(char *user_input, char *argv[], char **env) {
+    /* Declare variables */
+    char *path, *args[10], *shell;
+    pid_t baby_pid;
+    int stat, numofargs;
 
-	/* Set shell variable to the name of the shell */
-	shell = argv[0];
-	/* Tokenize user input into arguments */
-	numofargs = tokenizer(user_input, args);
+    /* Set shell variable to the name of the shell */
+    shell = argv[0];
+    /* Tokenize user input into arguments */
+    numofargs = tokenizer(user_input, args);
 
-	/* If no arguments, return */
-	if (numofargs == 0)
-	{
-		return;
-	}
+    /* If no arguments, return */
+    if (numofargs == 0) {
+        return;
+    }
 
-	/* Check if the command is a built-in command and execute if yes */
-	if (func_builtin_commands(args, numofargs, user_input, env))
-	{
-		return;
-	}
-	
-	/* Get the full path of the command */
-	path = f_path(args[0]);
+    /* Check if the command is a built-in command and execute if yes */
+    if (func_builtin_commands(args, numofargs, user_input, env)) {
+        return;
+    }
 
-	/* Fork a child process */
-	baby_pid = fork();
+    /* Get the full path of the command */
+    path = f_path(args[0]);
 
-	/* Check for fork error */
-	if (baby_pid == -1)
-	{
-		free(user_input);
-		exit(1);
-	}
-	/* Child process */
-	else if (baby_pid == 0)
-	{
-		/* Execute the command, and handle error if it fails */
-		if (execve(path, args, NULL) == -1)
-		{
-			write(2, shell, strlen(shell));
-			write(2, ": does not exist\n", 17);
-			exit(127);
-		}
-	}
-	/* Parent process */
-	else
-	{
-		/* Wait for the child process to complete */
-		wait(&stat);
-	}
-	/* Free the allocated path memory */
-	free(path);
+    /* Fork a child process */
+    baby_pid = fork();
+
+    /* Check for fork error */
+    if (baby_pid == -1) {
+        free(user_input);
+        exit(1);
+    }
+    /* Child process */
+    else if (baby_pid == 0) {
+        /* Execute the command, and handle error if it fails */
+        if (execve(path, args, NULL) == -1) {
+            /* Check if not connected to a terminal (non-interactive mode) */
+            if (!isatty(STDIN_FILENO)) {
+                write(2, ": does not exist\n", 17);
+                exit(127);
+            } else {
+                write(2, shell, strlen(shell));
+                write(2, ": does not exist\n", 17);
+                exit(127);
+            }
+        }
+    }
+    /* Parent process */
+    else {
+        /* Wait for the child process to complete */
+        wait(&stat);
+    }
+    /* Free the allocated path memory */
+    free(path);
 }
