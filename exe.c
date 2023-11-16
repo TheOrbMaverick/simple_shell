@@ -7,71 +7,83 @@
  */
 
 #define MAX_COMMAND_LENGTH 100
+
+/**
+ * main - Simple UNIX command line interpreter.
+ *
+ * Return: Always returns 0.
+ */
 int main(void)
 {
-    pid_t pid;
-    char command[MAX_COMMAND_LENGTH];
-    size_t len;
+	char command[MAX_COMMAND_LENGTH];
+	size_t len;
+	pid_t pid;
+	int status;
 
-    while (1)
-    {
-        /* Display the prompt */
-        printf("$ ");
+	while (1)
+	{
+		/* Display the prompt */
+		printf("($) ");
 
-        /* Read the command from the user */
-        if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
-        {
-            /* Handle Ctrl+D (EOF) */
-            printf("\n");
-            break;
-        }
+		/* Read the command from the user */
+		if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
+		{
+			/* Handle Ctrl+D (EOF) */
+			printf("\n");
+			break;
+		}
 
-        /* Remove the newline character */
-        len = strlen(command);
-        if (len > 0 && command[len - 1] == '\n')
-        {
-            command[len - 1] = '\0';
-        }
+		/* Remove the newline character */
+		len = strlen(command);
+		if (len > 0 && command[len - 1] == '\n')
+		{
+			command[len - 1] = '\0';
+		}
 
-        /* Fork a new process */
-        pid = fork();
+		/* Fork a new process */
+		pid = fork();
 
-        if (pid == -1)
-        {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        }
+		if (pid == -1)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
 
-        if (pid == 0)
-        {
-            /* Child process */
-            /* Execute the command */
-            if (execve(command, NULL, NULL) == -1)
-            {
-                /* Handle error */
-                perror("execve");
-                exit(EXIT_FAILURE);
-            }
-        }
-        else
-        {
-            /* Parent process */
-            /* Wait for the child to finish */
-            int status;
-            waitpid(pid, &status, 0);
+		if (pid == 0)
+		{
+			/* Child process */
+			/* Execute the command */
+			char *args[2];	/* Argument list */
+			char *env[] = {NULL};	/* Environment list */
 
-            /* Check if the child process exited successfully */
-            if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
-            {
-                printf("Command executed successfully.\n");
-            }
-            else
-            {
-                printf("Error executing the command.\n");
-            }
-        }
-    }
+			args[0] = command;
+			args[1] = NULL;
 
-    printf("Exiting shell.\n");
-    return (0);
+			if (execve(command, args, env) == -1)
+			{
+				/* Handle error */
+				perror("execve");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			/* Parent process */
+			/* Wait for the child to finish */
+			waitpid(pid, &status, 0);
+
+			/* Check if the child process exited successfully */
+			if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
+			{
+				printf("Command executed successfully.\n");
+			}
+			else
+			{
+				printf("Error executing the command.\n");
+			}
+		}
+	}
+
+	printf("Exiting shell.\n");
+	return 0;
 }
