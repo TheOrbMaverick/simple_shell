@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * our_printf - Write a string to standard output.
+ * my_printf - Write a string to standard output.
  * @format: The string to be written.
  *
  * Returns the number of characters written(excluding null terminator).
