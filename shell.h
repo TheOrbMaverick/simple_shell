@@ -14,7 +14,9 @@
 #include <sys/types.h>
 
 /* Function Prototypes*/
-int main(void);
+void user_prompt(void);
+char *read_input(void);
+void execute_input(char *user_input, char *argv[], char **env);
 void my_printf(const char *format, ...);
 
 #endif
