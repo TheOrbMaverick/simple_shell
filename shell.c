@@ -14,15 +14,15 @@
 int main(int argc, char *argv[], char **env)
 {
 	pid_t parent_pid;
-	char *buffer;
+	char *user_buffer;
 	(void)argc;
 
 	while (1)
 	{
 		user_prompt();
-		buffer = read_input();
-		execute_input(buffer, argv, env);
-		free(buffer);
+		user_buffer = read_input();
+		execute_input(user_buffer, argv, env);
+		free(user_buffer);
 	}
 
 	parent_pid = getppid();
