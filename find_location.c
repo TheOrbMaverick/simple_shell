@@ -34,7 +34,8 @@ char *find_file(const char *directories, const char *filename)
 		}
 
 		/* Construct the full path by concatenating directory and filename */
-		snprintf(path, strlen(token) + strlen(filename) + 2, "%s/%s", token, filename);
+		snprintf(path, strlen(token) + strlen(filename) + 2, 
+        "%s/%s", token, filename);
 
 		/* Check if the file at the constructed path is executable */
 		if (stat(path, &file_stat) == 0 && access(path, X_OK) == 0)
@@ -42,7 +43,7 @@ char *find_file(const char *directories, const char *filename)
 			/* Free the duplicated directory string */
 			free(dir_copy);
 			/* Return the full path if the file is executable */
-			return path;
+			return (path);
 		}
 
 		/* Free the allocated path memory */
