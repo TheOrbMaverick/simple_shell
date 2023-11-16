@@ -75,7 +75,7 @@ int main(void)
 			/* Check if the child process exited successfully */
 			if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 			{
-				my_print("Command executed successfully.\n");
+				my_printf("Command executed successfully.\n");
 			}
 			else
 			{
