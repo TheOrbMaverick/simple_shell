@@ -15,7 +15,7 @@ void display_prompt(void)
  * Return: A pointer to the user input buffer.
  */
 
-char *read_input(void) 
+char *read_input(void)
 {
 	char *buffer = NULL;
 	size_t bufsize = 0;
@@ -24,13 +24,13 @@ char *read_input(void)
 	{
 		/* Handle Ctrl+D or other exit conditions */
 		free(buffer);
-		return NULL;
+		return (NULL);
 	}
 
 	/* Remove newline character */
 	buffer[strcspn(buffer, "\n")] = '\0';
 
-	return buffer;
+	return (buffer);
 }
 
 /**
