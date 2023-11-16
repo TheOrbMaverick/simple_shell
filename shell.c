@@ -1,32 +1,27 @@
 #include "shell.h"
 
-/**
- * main - Entry point for the custom shell program.
- * @argc: Number of command-line arguments.
- * @argv: Array of command-line argument strings.
- * @env: Array of environment variable strings.
- *
- * This function initializes the shell, reads user input,
- * and executes commands in a loop.
- *
- * Return: Always returns 0.
- */
-int main(int argc, char *argv[], char **env)
-{
-	pid_t parent_pid;
-	char *user_buffer;
-	(void)argc;
+void display_prompt(void) {
+	printf("#cisfun$ ");
+}
 
-	while (1)
-	{
-		user_prompt();
-		user_buffer = read_input();
-		execute_input(user_buffer, argv, env);
-		free(user_buffer);
+char *read_input(void) {
+	char *buffer = NULL;
+	size_t bufsize = 0;
+
+	if (getline(&buffer, &bufsize, stdin) == -1) {
+		/* Handle Ctrl+D or other exit conditions */
+		free(buffer);
+		return NULL;
 	}
 
-	parent_pid = getppid();
-	our_printf("Parent PID: %d\n", parent_pid);
+	/* Remove newline character */
+	buffer[strcspn(buffer, "\n")] = '\0';
 
-	return (0);
+	return buffer;
+}
+
+void execute_command(const char *command) {
+	/* Implement command execution logic here */
+	/* You may need to parse the command and use execvp or other functions */
+	printf("Executing: %s\n", command);
 }
