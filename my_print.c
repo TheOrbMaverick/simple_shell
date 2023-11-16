@@ -19,3 +19,4 @@ void my_printf(const char *format, ...)
 	/* Clean up and free resources associated with va_list. */
 	va_end(args);
 }
+

@@ -24,3 +24,4 @@ char *read_input(void)
 	/* You can add additional processing if needed */
 	return (buffer);
 }
+

@@ -11,3 +11,4 @@ void user_prompt(void)
 	/* Call this function to display the shell prompt */
 	my_printf("$ ");
 }
+
