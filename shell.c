@@ -13,9 +13,9 @@
  */
 int main(int argc, char *argv[], char **env)
 {
+	pid_t parent_pid;
 	char *buffer;
 	(void)argc;
-	pid_t parent_pid;
 
 	while (1)
 	{
