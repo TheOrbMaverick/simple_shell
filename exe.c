@@ -23,13 +23,13 @@ int main(void)
 	while (1)
 	{
 		/* Display the prompt */
-		printf("$ ");
+		my_printf("$ ");
 
 		/* Read the command from the user */
 		if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
 		{
 			/* Handle Ctrl+D (EOF) */
-			printf("\n");
+			my_printf("\n");
 			break;
 		}
 
@@ -75,15 +75,15 @@ int main(void)
 			/* Check if the child process exited successfully */
 			if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 			{
-				printf("Command executed successfully.\n");
+				my_print("Command executed successfully.\n");
 			}
 			else
 			{
-				printf("Error executing the command.\n");
+				my_printf("Error executing the command.\n");
 			}
 		}
 	}
 
-	printf("Exiting shell.\n");
+	my_printf("Exiting shell.\n");
 	return (0);
 }

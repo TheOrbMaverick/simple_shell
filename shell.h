@@ -15,5 +15,6 @@
 
 /* Function Prototypes*/
 int main(void);
+void my_printf(const char *format, ...);
 
 #endif
