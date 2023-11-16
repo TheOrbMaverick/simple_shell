@@ -23,7 +23,7 @@ int main(void)
 	while (1)
 	{
 		/* Display the prompt */
-		printf("($) ");
+		printf("$ ");
 
 		/* Read the command from the user */
 		if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
