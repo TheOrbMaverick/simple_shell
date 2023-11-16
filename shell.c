@@ -15,6 +15,7 @@ int main(int argc, char *argv[], char **env)
 {
 	char *buffer;
 	(void)argc;
+	pid_t parent_pid;
 
 	while (1)
 	{
@@ -23,6 +24,9 @@ int main(int argc, char *argv[], char **env)
 		execute_input(buffer, argv, env);
 		free(buffer);
 	}
+
+	parent_pid = getppid();
+	our_printf("Parent PID: %d\n", parent_pid);
 
 	return (0);
 }
