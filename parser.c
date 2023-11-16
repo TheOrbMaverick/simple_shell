@@ -23,7 +23,7 @@ int tokenizer(char *input, char *args[])
 	}
 
 	args[i] = NULL;
-	return i;
+	return (i);
 }
 
 /**
@@ -49,5 +49,5 @@ char *read_input(void)
 
 	buffer = ourhash_comment(buffer);
 
-	return buffer;
+	return (buffer);
 }
