@@ -2,6 +2,9 @@
 
 /**
  * main - Entry point for the custom shell program.
+ * @argc: Number of command-line arguments.
+ * @argv: Array of command-line argument strings.
+ * @env: Array of environment variable strings.
  *
  * This function initializes the shell, reads user input,
  * and executes commands in a loop.
@@ -11,16 +14,16 @@
 
 int main(int argc, char *argv[], char **env)
 {
-	char *input_buffer;
-	(void)argc;
+    char *buffer;
+    (void)argc;
 
-	while (1)
-	{
-		user_prompt();
-		input_buffer = read_input();
-		execute_input(input_buffer, argv, env);
-		free(input_buffer);
-	}
+    while (1)
+    {
+        user_prompt();
+        buffer = read_input();
+        execute_input(buffer, argv, env);
+        free(buffer);
+    }
 
-	return (0);
+    return (0);
 }

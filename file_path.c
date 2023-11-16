@@ -11,35 +11,34 @@
  *
  * Returns: On success, the full path of the command. On failure, NULL.
  */
-
 char *f_path(const char *name) 
 {
-    char *main_path;
-    char *complete_path;
+	char *main_path;
+	char *complete_path;
 
-    main_path = getenv("PATH");
+	main_path = getenv("PATH");
 
-    if (forward_slash(name) && access(name, X_OK) == 0)
-    {
-        return (strdup(name));
-    } else if (!main_path)
-    {
-        perror("Path does not exist");
-        return (NULL);
-    }
+	if (forward_slash(name) && access(name, X_OK) == 0)
+	{
+		return (strdup(name));
+	}
+	else if (!main_path)
+	{
+		perror("Path does not exist");
+		return (NULL);
+	}
 
-    complete_path = find_file(main_path, name);
+	complete_path = find_file(main_path, name);
 
-    if (complete_path == NULL)
-    {
-        write(2, name, strlen(name));
-        write(2, ": command not found\n", 19);
-        return (NULL);
-    }
+	if (complete_path == NULL)
+	{
+		write(2, name, strlen(name));
+		write(2, ": command not found\n", 19);
+		return (NULL);
+	}
 
-    return (complete_path);
+	return (complete_path);
 }
-
 
 /**
  * forward_slash - Check if a string starts with a forward slash.
@@ -49,13 +48,12 @@ char *f_path(const char *name)
  *
  * Returns: 1 if the string starts with a forward slash, otherwise 0.
  */
-
 int forward_slash(const char *str)
 {
-    if (str != NULL || str[0] == '/')
-    {
-        return (1);
-    }
+	if (str != NULL || str[0] == '/')
+	{
+		return (1);
+	}
 
-    return (0);
+	return (0);
 }
