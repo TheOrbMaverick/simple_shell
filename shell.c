@@ -46,46 +46,48 @@ char *read_input(void)
  * Note: Implement command execution logic here.
  */
 
-void execute_command(const char *command)
+extern char **environ;
+
+void execute_command(const char *command, char *argv0)
 {
-	pid_t pid = fork();
+    pid_t pid = fork();
 
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
+    if (pid == -1)
+    {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
 
-	if (pid == 0)  /* Child process */
-	{
-		/* Parse command and arguments */
-		char *args[64];
-		char *token;
-		int i = 0;
+    if (pid == 0)  /* Child process */
+    {
+        /* Parse command and arguments */
+        char *args[64];
+        char *token;
+        int i = 0;
 
-		token = strtok((char *)command, " ");
-		while (token != NULL)
-		{
-			args[i++] = token;
-			token = strtok(NULL, " ");
-		}
+        token = strtok((char *)command, " ");
+        while (token != NULL)
+        {
+            args[i++] = token;
+            token = strtok(NULL, " ");
+        }
 
-		args[i] = NULL;
+        args[i] = NULL;
 
-		execve(args[0], args, NULL);
+        execve(args[0], args, environ);
 
-		/* If execve fails */
-		_exit(EXIT_FAILURE);
+        /* If execve fails */
+        perror(argv0);  // Print the program name as part of the error message
+        _exit(EXIT_FAILURE);
+    } else  /* Parent process */
+    {
+        int status;
 
-	} else  /* Parent process */
-	{
-		int status;
+        waitpid(pid, &status, 0);
 
-		waitpid(pid, &status, 0);
-
-		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		{
-			fprintf(stderr, "./shell: %s: command not found\n", command);
-		}
-	}
+        if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+        {
+            fprintf(stderr, "%s: %s: command not found\n", argv0, command);
+        }
+    }
 }

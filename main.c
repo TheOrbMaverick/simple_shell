@@ -6,9 +6,10 @@
  * Return: Always returns 0.
  */
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	char *user_input;
+	(void)argc;
 
 	while (1)
 	{
@@ -21,7 +22,7 @@ int main(void)
 			break;
 		}
 
-		execute_command(user_input);
+		execute_command(user_input, argv[0]);
 
 		free(user_input);
 	}
