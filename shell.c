@@ -6,7 +6,7 @@
 
 void display_prompt(void)
 {
-	printf("#cisfun$ ");
+	my_printf("#cisfun$ ");
 }
 
 /**
@@ -44,5 +44,5 @@ void execute_command(const char *command)
 {
 	/* Implement command execution logic here */
 	/* You may need to parse the command and use execvp or other functions */
-	printf("Executing: %s\n", command);
+	my_printf("Executing: %s\n", command);
 }
