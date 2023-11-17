@@ -58,17 +58,27 @@ void execute_command(const char *command)
 
     if (pid == 0)  /* Child process */
     {
-        char *args[2];
-        args[0] = (char *)command;
-        args[1] = NULL;
+        /* Parse command and arguments */
+        char *args[64];
+        char *token;
+        int i = 0;
 
-        execve(command, args, NULL);
+        token = strtok((char *)command, " ");
+        while (token != NULL)
+        {
+            args[i++] = token;
+            token = strtok(NULL, " ");
+        }
+
+        args[i] = NULL;
+
+        execve(args[0], args, NULL);
 
         /* If execve fails */
         perror("execve");
         _exit(EXIT_FAILURE);
-    }
-    else  /* Parent process */
+
+    } else  /* Parent process */
     {
         int status;
         waitpid(pid, &status, 0);
