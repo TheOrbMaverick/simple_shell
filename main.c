@@ -6,26 +6,50 @@
  * Return: Always returns 0.
  */
 
-int main(int argc, char *argv[])
+int main(void)
 {
-	char *user_input;
-	(void)argc;
+    int pipe_fd[2];
+    pid_t child_pid;
+    char *const cmd_ls[] = {"ls", NULL};
+    char *const cmd_wc[] = {"wc", "-l", NULL};
 
-	while (1)
-	{
-		display_prompt();  /* Display the prompt to the user */
-		user_input = read_input();
+    /* Create a pipe */
+    if (pipe(pipe_fd) == -1) {
+        perror("pipe");
+        exit(EXIT_FAILURE);
+    }
 
-		if (user_input == NULL)
-		{
-			/* Handle Ctrl+D or other exit conditions */
-			break;
-		}
+    /* Fork a child process */
+    child_pid = fork();
 
-		execute_command(user_input, argv[0]);
+    if (child_pid == -1) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
 
-		free(user_input);
-	}
+    if (child_pid == 0) {
+        /* Child process */
+        close(pipe_fd[0]);  /* Close the read end of the pipe */
+        dup2(pipe_fd[1], STDOUT_FILENO);  /* Redirect stdout to the pipe */
 
-	return (0);
+        /* Execute the first command (e.g., ls) */
+        execve("/bin/ls", cmd_ls, NULL);
+
+        /* If execve fails */
+        perror("execve");
+        exit(EXIT_FAILURE);
+    } else {
+        /* Parent process */
+        close(pipe_fd[1]);  /* Close the write end of the pipe */
+        dup2(pipe_fd[0], STDIN_FILENO);  /* Redirect stdin to the pipe */
+
+        /* Execute the second command (e.g., wc) */
+        execve("/usr/bin/wc", cmd_wc, NULL);
+
+        /* If execve fails */
+        perror("execve");
+        exit(EXIT_FAILURE);
+    }
+
+    return 0;
 }
