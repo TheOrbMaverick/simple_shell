@@ -75,7 +75,6 @@ void execute_command(const char *command)
         execve(args[0], args, NULL);
 
         /* If execve fails */
-        perror("execve");
         _exit(EXIT_FAILURE);
 
     } else  /* Parent process */
