@@ -48,31 +48,34 @@ char *read_input(void)
 
 void execute_command(const char *command)
 {
-	pid_t pid = fork();
+    pid_t pid = fork();
 
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
+    if (pid == -1)
+    {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
 
-	if (pid == 0)  /* Child process */
-	{
-		char *args[] = {(char *)command, NULL};
-		execve(command, args, NULL);
+    if (pid == 0)  // Child process
+    {
+        char *args[2];
+        args[0] = (char *)command;
+        args[1] = NULL;
 
-		/* If execve fails */
-		perror("execve");
-		_exit(EXIT_FAILURE);
-	}
-	else  /* Parent process */
-	{
-		int status;
-		waitpid(pid, &status, 0);
+        execve(command, args, NULL);
 
-		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		{
-			fprintf(stderr, "./shell: %s: command not found\n", command);
-		}
-	}
+        /* If execve fails */
+        perror("execve");
+        _exit(EXIT_FAILURE);
+    }
+    else  // Parent process
+    {
+        int status;
+        waitpid(pid, &status, 0);
+
+        if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+        {
+            fprintf(stderr, "./shell: %s: command not found\n", command);
+        }
+    }
 }
