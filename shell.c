@@ -56,7 +56,7 @@ void execute_command(const char *command)
         exit(EXIT_FAILURE);
     }
 
-    if (pid == 0)  // Child process
+    if (pid == 0)  /* Child process */
     {
         char *args[2];
         args[0] = (char *)command;
@@ -68,7 +68,7 @@ void execute_command(const char *command)
         perror("execve");
         _exit(EXIT_FAILURE);
     }
-    else  // Parent process
+    else  /* Parent process */
     {
         int status;
         waitpid(pid, &status, 0);
