@@ -11,5 +11,7 @@
 void display_prompt(void);
 char *read_input(void);
 void execute_command(char *command);
+void my_printf(const char *format, ...);
+char *custom_strtok(char *str, const char *delim);
 
 #endif

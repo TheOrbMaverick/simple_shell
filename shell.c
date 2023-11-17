@@ -10,7 +10,10 @@ char *read_input(void)
 	char *buffer = NULL;
 	size_t bufsize = 0;
 
-	if (getline(&buffer, &bufsize, stdin) == -1)
+	printf("#cisfun$ ");
+	
+	/* Using fgets as a replacement for getline */
+	if (fgets(buffer, bufsize, stdin) == NULL)
 	{
 		if (feof(stdin))  /* Check for end-of-file condition (Ctrl+D) */
 		{
@@ -20,7 +23,7 @@ char *read_input(void)
 		}
 		else
 		{
-			perror("getline");
+			perror("fgets");
 			free(buffer);
 			exit(EXIT_FAILURE);
 		}
@@ -32,16 +35,29 @@ char *read_input(void)
 
 void execute_command(char *command)
 {
-	char *token;  /* Tokenize the input to separate command and arguments */
-	pid_t pid;
+	pid_t pid;  /* Declare pid at the beginning of the block */
+	char *args[64];  /* Assuming a maximum of 64 arguments */
+	int i = 0;
+	char *token = command;
 
-	token = strtok(command, " ");
-
-	if (token == NULL)
+	while (*token != '\0' && i < 64)
 	{
-		fprintf(stderr, "No command entered.\n");
-		return;
+		char *space = strpbrk(token, " ");
+
+		if (space != NULL)
+		{
+			*space = '\0';
+			args[i++] = token;
+			token = space + 1;
+		}
+		else
+		{
+			args[i++] = token;
+			break;
+		}
 	}
+
+	args[i] = NULL;
 
 	pid = fork();  /* Create a child process */
 
@@ -53,21 +69,12 @@ void execute_command(char *command)
 
 	if (pid == 0)  /* Child process */
 	{
-		char *args[64];  /* Assuming a maximum of 64 arguments */
-		int i = 0;
+		char *envp[] = {NULL};  /* You can modify this if you need to set environment variables */
 
-		while (token != NULL)
-		{
-			args[i++] = token;
-			token = strtok(NULL, " ");
-		}
+		execve(args[0], args, envp);  /* Execute the command with arguments and environment variables */
 
-		args[i] = NULL;
-
-		execvp(args[0], args);  /* Execute the command with arguments */
-
-		/* If execvp fails */
-		perror("execvp");
+		/* If execve fails */
+		perror("execve");
 		_exit(EXIT_FAILURE);
 	}
 	else  /* Parent process */
