@@ -1,32 +1,26 @@
 #include "shell.h"
 
 /**
- * main - Entry point for the custom shell program.
- * @argc: Number of command-line arguments.
- * @argv: Array of command-line argument strings.
- * @env: Array of environment variable strings.
- *
- * This function initializes the shell, reads user input,
- * and executes commands in a loop.
- *
- * Return: Always returns 0.
- */
+  * main - Wait program
+  * @argc: Argumnt count
+  * @argv: Array of arguments
+  * @env: Environment variable
+  *
+  * Return: O Always succes
+  */
+
 int main(int argc, char *argv[], char **env)
 {
-	pid_t parent_pid;
-	char *user_buffer;
+	char *input_buffer;
 	(void)argc;
 
 	while (1)
 	{
-		user_prompt();
-		user_buffer = read_input();
-		execute_input(user_buffer, argv, env);
-		free(user_buffer);
+		print_prompt();
+		input_buffer = read_input();
+		execute_command(input_buffer, argv, env);
+		free(input_buffer);
 	}
-
-	parent_pid = getppid();
-	our_printf("Parent PID: %d\n", parent_pid);
 
 	return (0);
 }

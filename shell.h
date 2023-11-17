@@ -1,32 +1,34 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-/* Include necessary header files */
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
+#include <unistd.h>
 #include <string.h>
-#include <stdarg.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <errno.h>
 
-/* Function Prototypes*/
-void user_prompt(void);
-void our_printf(const char *format, ...);
+/* Execute Functions */
+int startsWithForwardSlash(char const *str);
+char *get_file_path(char *file_name);
+char *get_file_loc(char *path, char *file_name);
+void execute_command(char *input, char *argv[], char **env);
 char *read_input(void);
-void execute_input(char *user_input, char *argv[], char **env);
-char *ourhash_comment(char *input_string);
-char *simple_getline(FILE *input_stream);
-void simple_cd(char **args, int nof_args);
-void simple_env(char **env);
-int hell_exit(char **args, char *val_put);
-int func_builtin_commands(char **args,
-	int nof_args,
-	char *val_put,
-	char **env);
-char *find_file(const char *directories, const char *filename);
-char *f_path(const char *name);
-int forward_slash(const char *str);
-int tokenizer(char *input, char *args[]);
+void print_prompt(void);
+int tokenize_input(char *input, char *args[]);
 
+/* Built in Functions */
+int handle_builtin_commands(char **args,
+		int num_args, char *input,
+		char **env);
+void print_env(char **env);
+void handle_cd(char **args, int num_args);
+void handle_exit(char *input, int exit_status);
+int shell_exit(char **args, char *input);
 
-#endif
+/* Handle various symbols */
+char *handle_comment(char *input);
+#endif /* SHELL_H */
