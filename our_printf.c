@@ -1,13 +1,13 @@
 #include "shell.h"
 
 /**
- * my_printf - Write a string to standard output.
+ * our_printf - Write a string to standard output.
  * @format: The string to be written.
  *
  * Returns the number of characters written(excluding null terminator).
  */
 
-void my_printf(const char *format, ...)
+void our_printf(const char *format, ...)
 {
 	/* Declare a va_list to hold the variable arguments. */
 	va_list args;
