@@ -6,50 +6,58 @@
  * Return: Always returns 0.
  */
 
+#define MAX_COMMAND_LENGTH 100
+
 int main(void)
 {
-    int pipe_fd[2];
-    pid_t child_pid;
-    char *const cmd_ls[] = {"ls", NULL};
-    char *const cmd_wc[] = {"wc", "-l", NULL};
+	char command[MAX_COMMAND_LENGTH];
+	char *args[2];
+	pid_t pid;
 
-    /* Create a pipe */
-    if (pipe(pipe_fd) == -1) {
-        perror("pipe");
-        exit(EXIT_FAILURE);
-    }
+	while (1)
+	{
+		my_printf("#cisfun$ ");
 
-    /* Fork a child process */
-    child_pid = fork();
+		if (fgets(command, sizeof(command), stdin) == NULL)
+		{
+			/* Handle Ctrl+D or other exit conditions */
+			my_printf("\n");
+			break;
+		}
 
-    if (child_pid == -1) {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
+		/* Remove newline character */
+		command[strcspn(command, "\n")] = '\0';
 
-    if (child_pid == 0) {
-        /* Child process */
-        close(pipe_fd[0]);  /* Close the read end of the pipe */
-        dup2(pipe_fd[1], STDOUT_FILENO);  /* Redirect stdout to the pipe */
+		pid = fork();
 
-        /* Execute the first command (e.g., ls) */
-        execve("/bin/ls", cmd_ls, NULL);
+		if (pid == -1)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
 
-        /* If execve fails */
-        perror("execve");
-        exit(EXIT_FAILURE);
-    } else {
-        /* Parent process */
-        close(pipe_fd[1]);  /* Close the write end of the pipe */
-        dup2(pipe_fd[0], STDIN_FILENO);  /* Redirect stdin to the pipe */
+		if (pid == 0)  /* Child process */
+		{
+			args[0] = command;
+			args[1] = NULL;
 
-        /* Execute the second command (e.g., wc) */
-        execve("/usr/bin/wc", cmd_wc, NULL);
+			execve(command, args, NULL);
 
-        /* If execve fails */
-        perror("execve");
-        exit(EXIT_FAILURE);
-    }
+			/* If exec fails */
+			perror(command);
+			exit(EXIT_FAILURE);
+		}
+		else  /* Parent process */
+		{
+			int status;
+			waitpid(pid, &status, 0);
 
-    return 0;
+			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+			{
+				fprintf(stderr, "./simple_shell: %s: command not found\n", command);
+			}
+		}
+	}
+
+	return (0);
 }
