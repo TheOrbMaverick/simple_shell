@@ -6,57 +6,24 @@
  * Return: Always returns 0.
  */
 
-#define MAX_COMMAND_LENGTH 100
-
 int main(void)
 {
-	char command[MAX_COMMAND_LENGTH];
-	char *args[2];
-	pid_t pid;
+	char *user_input;
 
 	while (1)
 	{
-		my_printf("#cisfun$ ");
+		display_prompt();  /* Display the prompt to the user */
+		user_input = read_input();
 
-		if (fgets(command, sizeof(command), stdin) == NULL)
+		if (user_input == NULL)
 		{
 			/* Handle Ctrl+D or other exit conditions */
-			my_printf("\n");
 			break;
 		}
 
-		/* Remove newline character */
-		command[strcspn(command, "\n")] = '\0';
+		execute_command(user_input);
 
-		pid = fork();
-
-		if (pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-
-		if (pid == 0)  /* Child process */
-		{
-			args[0] = command;
-			args[1] = NULL;
-
-			execve(command, args, NULL);
-
-			/* If exec fails */
-			perror(command);
-			exit(EXIT_FAILURE);
-		}
-		else  /* Parent process */
-		{
-			int status;
-			waitpid(pid, &status, 0);
-
-			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-			{
-				fprintf(stderr, "./simple_shell: %s: command not found\n", command);
-			}
-		}
+		free(user_input);
 	}
 
 	return (0);

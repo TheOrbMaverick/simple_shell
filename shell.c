@@ -1,19 +1,9 @@
 #include "shell.h"
 
-/**
- * display_prompt - Displays the shell prompt.
- */
-
 void display_prompt(void)
 {
-	my_printf("#cisfun$ ");
+	printf("#cisfun$ ");
 }
-
-/**
- * read_input - Reads user input from stdin.
- *
- * Return: A pointer to the user input buffer.
- */
 
 char *read_input(void)
 {
@@ -22,12 +12,13 @@ char *read_input(void)
 
 	if (getline(&buffer, &bufsize, stdin) == -1)
 	{
-		if (feof(stdin))  /* Check for end-of-file condition */
+		if (feof(stdin))  /* Check for end-of-file condition (Ctrl+D) */
 		{
 			printf("\n");
 			free(buffer);
-			exit(EXIT_SUCCESS);
-		} else
+			exit(EXIT_SUCCESS);  /* Exit the program on Ctrl+D */
+		}
+		else
 		{
 			perror("getline");
 			free(buffer);
@@ -35,59 +26,58 @@ char *read_input(void)
 		}
 	}
 
-	buffer[strcspn(buffer, "\n")] = '\0';
+	buffer[strcspn(buffer, "\n")] = '\0';  /* Remove the newline character from the input */
 	return (buffer);
 }
 
-/**
- * execute_command - Executes a command.
- * @command: The command to be executed.
- *
- * Note: Implement command execution logic here.
- */
-
-extern char **environ;
-
-void execute_command(const char *command, char *argv0)
+void execute_command(char *command)
 {
-    pid_t pid = fork();
+	char *token;  /* Tokenize the input to separate command and arguments */
+	pid_t pid;
 
-    if (pid == -1)
-    {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
+	token = strtok(command, " ");
 
-    if (pid == 0)  /* Child process */
-    {
-        /* Parse command and arguments */
-        char *args[64];
-        char *token;
-        int i = 0;
+	if (token == NULL)
+	{
+		fprintf(stderr, "No command entered.\n");
+		return;
+	}
 
-        token = strtok((char *)command, " ");
-        while (token != NULL)
-        {
-            args[i++] = token;
-            token = strtok(NULL, " ");
-        }
+	pid = fork();  /* Create a child process */
 
-        args[i] = NULL;
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
 
-        execve(args[0], args, environ);
+	if (pid == 0)  /* Child process */
+	{
+		char *args[64];  /* Assuming a maximum of 64 arguments */
+		int i = 0;
 
-        /* If execve fails */
-        perror(argv0);  // Print the program name as part of the error message
-        _exit(EXIT_FAILURE);
-    } else  /* Parent process */
-    {
-        int status;
+		while (token != NULL)
+		{
+			args[i++] = token;
+			token = strtok(NULL, " ");
+		}
 
-        waitpid(pid, &status, 0);
+		args[i] = NULL;
 
-        if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-        {
-            fprintf(stderr, "%s: %s: command not found\n", argv0, command);
-        }
-    }
+		execvp(args[0], args);  /* Execute the command with arguments */
+
+		/* If execvp fails */
+		perror("execvp");
+		_exit(EXIT_FAILURE);
+	}
+	else  /* Parent process */
+	{
+		int status;
+		waitpid(pid, &status, 0);  /* Wait for the child process to complete */
+
+		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+		{
+			fprintf(stderr, "./shell: %s: command not found\n", command);
+		}
+	}
 }
