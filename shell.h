@@ -15,19 +15,19 @@
 int startsWithForwardSlash(char const *str);
 char *get_file_path(char *file_name);
 char *get_file_loc(char *path, char *file_name);
-void execute_command(char *input, char *argv[], char **env);
-char *read_input(void);
-void print_prompt(void);
-int tokenize_input(char *input, char *args[]);
+void exe_cmd(char *input, char *argv[], char **env);
+char *input_reader(void);
+void user_prompt(void);
+int tokenizer(char *input, char *args[]);
 
 /* Built in Functions */
-int handle_builtin_commands(char **args,
+int builtin_cmd(char **args,
 		int num_args, char *input,
 		char **env);
-void print_env(char **env);
-void handle_cd(char **args, int num_args);
-void handle_exit(char *input, int exit_status);
-int shell_exit(char **args, char *input);
+void environs_print(char **env);
+void cd_input(char **args, int num_args);
+void _exit(char *input, int exit_status);
+int exit_shell(char **args, char *input);
 
 /* Handle various symbols */
 char *handle_comment(char *input);

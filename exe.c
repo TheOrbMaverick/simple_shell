@@ -1,22 +1,22 @@
 #include "shell.h"
 
 /**
-  * print_prompt - Print the prompt to the user
+  * user_prompt - Print the prompt to the user
   */
 
-void print_prompt(void)
+void user_prompt(void)
 {
 	if (isatty(STDIN_FILENO))
 		write(STDOUT_FILENO, "MyShell$ ", 9);
 }
 
 /**
-  * read_input - Reads the input from the users
+  * input_reader - Reads the input from the users
   *
   * Return: Character variable to the program
   */
 
-char *read_input(void)
+char *input_reader(void)
 {
 	char *input_buffer;
 	size_t buf_size;
@@ -39,13 +39,13 @@ char *read_input(void)
 
 
 /**
-  * execute_command - Executes the input from the buffer
+  * exe_cmd - Executes the input from the buffer
   * @input: The argument from the buffer
   * @argv: Array of argument
   * @env: Environment variables
   */
 
-void execute_command(char *input, char *argv[], char **env)
+void exe_cmd(char *input, char *argv[], char **env)
 {
 	char *args[10];
 	char *path, *shell_name;
@@ -53,11 +53,11 @@ void execute_command(char *input, char *argv[], char **env)
 	pid_t child_pid;
 
 	shell_name = argv[0];
-	num_args = tokenize_input(input, args);
+	num_args = tokenizer(input, args);
 
 	if (num_args == 0)
 		return;
-	if (handle_builtin_commands(args, num_args, input, env) == 1)
+	if (builtin_cmd(args, num_args, input, env) == 1)
 		return;
 	path = get_file_path(args[0]);
 
@@ -88,14 +88,14 @@ void execute_command(char *input, char *argv[], char **env)
 }
 
 /**
-  * tokenize_input - Tokenizes the input strings
+  * tokenizer - Tokenizes the input strings
   * @input: Argument input
   * @args: The array of strings
   *
   * Return: Number of the items tokenized
   */
 
-int tokenize_input(char *input, char *args[])
+int tokenizer(char *input, char *args[])
 {
 	int count;
 	char *token;
@@ -115,7 +115,7 @@ int tokenize_input(char *input, char *args[])
 }
 
 /**
-  * handle_builtin_commands - Handle all the built in commands
+  * builtin_cmd - Handle all the built in commands
   * @args: Arguments to the built in commands
   * @num_args: Number of argument
   * @input: The input command
@@ -124,20 +124,20 @@ int tokenize_input(char *input, char *args[])
   * Return: 1 if successful 0, if unsuccessful
   */
 
-int handle_builtin_commands(char **args, int num_args, char *input, char **env)
+int builtin_cmd(char **args, int num_args, char *input, char **env)
 {
 	if (strcmp(args[0], "exit") == 0)
 	{
-		return (shell_exit(args, input));
+		return (exit_shell(args, input));
 	}
 	else if (strcmp(args[0], "cd") == 0)
 	{
-		handle_cd(args, num_args);
+		cd_input(args, num_args);
 		return (1);
 	}
 	else if (strcmp(args[0], "env") == 0)
 	{
-		print_env(env);
+		environs_print(env);
 		return (1);
 	}
 

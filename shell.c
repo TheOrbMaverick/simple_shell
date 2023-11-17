@@ -16,9 +16,9 @@ int main(int argc, char *argv[], char **env)
 
 	while (1)
 	{
-		print_prompt();
-		input_buffer = read_input();
-		execute_command(input_buffer, argv, env);
+		user_prompt();
+		input_buffer = input_reader();
+		exe_cmd(input_buffer, argv, env);
 		free(input_buffer);
 	}
 

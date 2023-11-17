@@ -1,11 +1,11 @@
 #include "shell.h"
 
 /**
-  * print_env - Prints the environment variables
+  * environs_print - Prints the environment variables
   * @env: Arguments
   */
 
-void print_env(char **env)
+void environs_print(char **env)
 {
 	while (*env != NULL)
 	{
@@ -17,26 +17,26 @@ void print_env(char **env)
 
 
 /**
-  * handle_exit - Handles the exit functionality
+  * _exit - Handles the exit functionality
   * @input: Input value to handle
   * @exit_status: Exit status of the code
   */
 
-void handle_exit(char *input, int exit_status)
+void _exit(char *input, int exit_status)
 {
 	free(input);
 	exit(exit_status);
 }
 
 /**
-  * shell_exit - Handles the exit status
+  * exit_shell - Handles the exit status
   * @args: Arguments to the function
   * @input: Checks the status of exit
   *
   * Return: Status of exit, 1 if otherwise
   */
 
-int shell_exit(char **args, char *input)
+int exit_shell(char **args, char *input)
 {
 	char *status_str;
 	int exit_status, i;
@@ -50,27 +50,27 @@ int shell_exit(char **args, char *input)
 		{
 			if (status_str[i] < '0' || status_str[i] > '9')
 			{
-				handle_exit(input, 2);
+				_exit(input, 2);
 				return (1);
 			}
 			exit_status = exit_status * 10 + (status_str[i] - '0');
 		}
-		handle_exit(input, exit_status);
+		_exit(input, exit_status);
 	}
 	else
 	{
-		handle_exit(input, 127);
+		_exit(input, 127);
 	}
 	return (1);
 }
 
 /**
-  * handle_cd - Handles the cd functionality
+  * cd_input - Handles the cd functionality
   * @args: Array of commands
   * @num_args: Argument count
   */
 
-void handle_cd(char **args, int num_args)
+void cd_input(char **args, int num_args)
 {
 	const char *home_dir, *prev_dir;
 
