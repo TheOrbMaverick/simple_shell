@@ -18,48 +18,48 @@ void env_print(char **env)
 
 /**
   * exit_handler - Handles the exit functionality
-  * @input: Input value to handle
-  * @exit_status: Exit status of the code
+  * @user_input: user_input value to handle
+  * @exit_stat: Exit status of the code
   */
 
-void exit_handler(char *input, int exit_status)
+void exit_handler(char *user_input, int exit_stat)
 {
-	free(input);
-	exit(exit_status);
+	free(user_input);
+	exit(exit_stat);
 }
 
 /**
   * exit_shell - Handles the exit status
   * @args: Arguments to the function
-  * @input: Checks the status of exit
+  * @user_input: Checks the status of exit
   *
   * Return: Status of exit, 1 if otherwise
   */
 
-int exit_shell(char **args, char *input)
+int exit_shell(char **args, char *user_input)
 {
 	char *status_str;
-	int exit_status, i;
+	int exit_stat, i;
 
 	if (args[1] != NULL)
 	{
-		exit_status = 0;
+		exit_stat = 0;
 		status_str = args[1];
 
 		for (i = 0; status_str[i] != '\0'; i++)
 		{
 			if (status_str[i] < '0' || status_str[i] > '9')
 			{
-				exit_handler(input, 2);
+				exit_handler(user_input, 2);
 				return (1);
 			}
-			exit_status = exit_status * 10 + (status_str[i] - '0');
+			exit_stat = exit_stat * 10 + (status_str[i] - '0');
 		}
-		exit_handler(input, exit_status);
+		exit_handler(user_input, exit_stat);
 	}
 	else
 	{
-		exit_handler(input, 127);
+		exit_handler(user_input, 127);
 	}
 	return (1);
 }
@@ -67,34 +67,34 @@ int exit_shell(char **args, char *input)
 /**
   * change_directory - Handles the cd functionality
   * @args: Array of commands
-  * @num_args: Argument count
+  * @num_of_args: Argument count
   */
 
-void change_directory(char **args, int num_args)
+void change_directory(char **args, int num_of_args)
 {
-	const char *home_dir, *prev_dir;
+	const char *home_directory, *pre_directory;
 
-	home_dir = getenv("HOME");
-	prev_dir = getenv("OLDPWD");
+	home_directory = getenv("HOME");
+	pre_directory = getenv("OLDPWD");
 
-	if (num_args == 1 || strcmp(args[1], "~") == 0)
+	if (num_of_args == 1 || strcmp(args[1], "~") == 0)
 	{
-		if (!home_dir)
+		if (!home_directory)
 		{
 			perror("Home environment not set");
 			return;
 		}
-		if (chdir(home_dir) != 0)
+		if (chdir(home_directory) != 0)
 			perror("cd");
 	}
-	else if (num_args == 2 && strcmp(args[1], "-") == 0)
+	else if (num_of_args == 2 && strcmp(args[1], "-") == 0)
 	{
-		if (!prev_dir)
+		if (!pre_directory)
 		{
 			perror("OLDPWD environment not set");
 			return;
 		}
-		if (chdir(prev_dir) != 0)
+		if (chdir(pre_directory) != 0)
 			perror("cd");
 	}
 	else

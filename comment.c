@@ -1,22 +1,22 @@
 #include "shell.h"
 
 /**
-  * user_comment - Handles the '#' in the input
-  * @input: Input value
+  * comments_handler - Handles the '#' in the user_input
+  * @user_input: user_input value
   *
-  * Return: The stripped down input
+  * Return: The stripped down user_input
   */
 
-char *user_comment(char *input)
+char *comments_handler(char *user_input)
 {
-	char *comment_pos;
+	char *comment;
 
-	comment_pos = strstr(input, " #");
+	comment = strstr(user_input, " #");
 
-	if (comment_pos)
+	if (comment)
 	{
-		*comment_pos = '\0';
+		*comment = '\0';
 	}
 
-	return (input);
+	return (user_input);
 }

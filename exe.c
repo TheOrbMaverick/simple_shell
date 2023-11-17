@@ -32,32 +32,32 @@ char *user_input_reader(void)
 		exit(0);
 	}
 
-	temp_input_storage = user_comment(temp_input_storage);
+	temp_input_storage = comments_handler(temp_input_storage);
 
 	return (temp_input_storage);
 }
 
 
 /**
-  * cmd_exe - Executes the input from the buffer
-  * @input: The argument from the buffer
+  * cmd_exe - Executes the user_input from the buffer
+  * @user_input: The argument from the buffer
   * @argv: Array of argument
   * @env: Environment variables
   */
 
-void cmd_exe(char *input, char *argv[], char **env)
+void cmd_exe(char *user_input, char *argv[], char **env)
 {
 	char *args[10];
 	char *path, *shell_name;
-	int status, num_args;
+	int status, num_of_args;
 	pid_t child_pid;
 
 	shell_name = argv[0];
-	num_args = tokenizer(input, args);
+	num_of_args = tokenizer(user_input, args);
 
-	if (num_args == 0)
+	if (num_of_args == 0)
 		return;
-	if (builtin(args, num_args, input, env) == 1)
+	if (builtin(args, num_of_args, user_input, env) == 1)
 		return;
 	path = file_path(args[0]);
 
@@ -66,7 +66,7 @@ void cmd_exe(char *input, char *argv[], char **env)
 	if (child_pid == -1)
 	{
 		perror("Error: Failed to create");
-		free(input);
+		free(user_input);
 		exit(1);
 	}
 
@@ -88,20 +88,20 @@ void cmd_exe(char *input, char *argv[], char **env)
 }
 
 /**
-  * tokenizer - Tokenizes the input strings
-  * @input: Argument input
+  * tokenizer - Tokenizes the user_input strings
+  * @user_input: Argument user_input
   * @args: The array of strings
   *
   * Return: Number of the items tokenized
   */
 
-int tokenizer(char *input, char *args[])
+int tokenizer(char *user_input, char *args[])
 {
 	int count;
 	char *token;
 
 	count = 0;
-	token = strtok(input, " \n");
+	token = strtok(user_input, " \n");
 
 	while (token)
 	{
@@ -117,22 +117,22 @@ int tokenizer(char *input, char *args[])
 /**
   * builtin - Handle all the built in commands
   * @args: Arguments to the built in commands
-  * @num_args: Number of argument
-  * @input: The input command
+  * @num_of_args: Number of argument
+  * @user_input: The user_input command
   * @env: The environment variables
   *
   * Return: 1 if successful 0, if unsuccessful
   */
 
-int builtin(char **args, int num_args, char *input, char **env)
+int builtin(char **args, int num_of_args, char *user_input, char **env)
 {
 	if (strcmp(args[0], "exit") == 0)
 	{
-		return (exit_shell(args, input));
+		return (exit_shell(args, user_input));
 	}
 	else if (strcmp(args[0], "cd") == 0)
 	{
-		change_directory(args, num_args);
+		change_directory(args, num_of_args);
 		return (1);
 	}
 	else if (strcmp(args[0], "env") == 0)

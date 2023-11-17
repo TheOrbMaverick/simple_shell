@@ -15,20 +15,20 @@
 int forward_slash(char const *str);
 char *file_path(char *file_name);
 char *file_location(char *path, char *file_name);
-void cmd_exe(char *input, char *argv[], char **env);
+void cmd_exe(char *user_input, char *argv[], char **env);
 char *user_input_reader(void);
 void user_prompt(void);
-int tokenizer(char *input, char *args[]);
+int tokenizer(char *user_input, char *args[]);
 
 /* Built in Functions */
 int builtin(char **args,
-		int num_args, char *input,
+		int num_of_args, char *user_input,
 		char **env);
 void env_print(char **env);
-void change_directory(char **args, int num_args);
-void exit_handler(char *input, int exit_status);
-int exit_shell(char **args, char *input);
+void change_directory(char **args, int num_of_args);
+void exit_handler(char *user_input, int exit_stat);
+int exit_shell(char **args, char *user_input);
 
 /* Handle various symbols */
-char *user_comment(char *input);
+char *comments_handler(char *user_input);
 #endif /* SHELL_H */
