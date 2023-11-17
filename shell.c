@@ -80,7 +80,7 @@ void execute_command(const char *command)
 	} else  /* Parent process */
 	{
 		int status;
-		
+
 		waitpid(pid, &status, 0);
 
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
