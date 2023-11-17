@@ -22,14 +22,20 @@ char *read_input(void)
 
 	if (getline(&buffer, &bufsize, stdin) == -1)
 	{
-		/* Handle Ctrl+D or other exit conditions */
-		free(buffer);
-		return (NULL);
+		if (feof(stdin))  /* Check for end-of-file condition */
+		{
+			printf("\n");
+			free(buffer);
+			exit(EXIT_SUCCESS);
+		} else
+		{
+			perror("getline");
+			free(buffer);
+			exit(EXIT_FAILURE);
+		}
 	}
 
-	/* Remove newline character */
 	buffer[strcspn(buffer, "\n")] = '\0';
-
 	return (buffer);
 }
 
@@ -42,7 +48,31 @@ char *read_input(void)
 
 void execute_command(const char *command)
 {
-	/* Implement command execution logic here */
-	/* You may need to parse the command and use execvp or other functions */
-	my_printf("Executing: %s\n", command);
+	pid_t pid = fork();
+
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+
+	if (pid == 0)  /* Child process */
+	{
+		char *args[] = {(char *)command, NULL};
+		execve(command, args, NULL);
+
+		/* If execve fails */
+		perror("execve");
+		_exit(EXIT_FAILURE);
+	}
+	else  /* Parent process */
+	{
+		int status;
+		waitpid(pid, &status, 0);
+
+		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+		{
+			fprintf(stderr, "./shell: %s: command not found\n", command);
+		}
+	}
 }
