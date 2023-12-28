@@ -27,7 +27,7 @@ int builtin(char **args,
 void env_print(char **env);
 void change_directory(char **args, int num_of_args);
 void exit_handler(char *user_input, int exit_stat);
-void exit_shell(char **args, char *user_input);
+int exit_shell(char **args, char *user_input);
 
 /* Handle various symbols */
 char *comments_handler(char *user_input);
