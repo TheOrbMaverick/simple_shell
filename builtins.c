@@ -42,7 +42,7 @@ int exit_shell(char **args, char *user_input)
 	free(user_input);
 	exit(0);
 
-	return (1);
+	return (0);
 }
 
 /**
