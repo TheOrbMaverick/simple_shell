@@ -29,39 +29,18 @@ void exit_handler(char *user_input, int exit_stat)
 }
 
 /**
-  * exit_shell - Handles the exit status
-  * @args: Arguments to the function
-  * @user_input: Checks the status of exit
+  * exit_shell - Handles the exit built-in command
+  * @args: Arguments to the exit command (not used in this case)
+  * @user_input: The user_input command (not used in this case)
   *
-  * Return: Status of exit, 1 if otherwise
+  * Return: This function does not return; it exits the shell
   */
 
-int exit_shell(char **args, char *user_input)
+void exit_shell(char **args, char *user_input)
 {
-	char *status_str;
-	int exit_stat, i;
-
-	if (args[1] != NULL)
-	{
-		exit_stat = 0;
-		status_str = args[1];
-
-		for (i = 0; status_str[i] != '\0'; i++)
-		{
-			if (status_str[i] < '0' || status_str[i] > '9')
-			{
-				exit_handler(user_input, 2);
-				return (1);
-			}
-			exit_stat = exit_stat * 10 + (status_str[i] - '0');
-		}
-		exit_handler(user_input, exit_stat);
-	}
-	else
-	{
-		exit_handler(user_input, 127);
-	}
-	return (1);
+    (void)args; // Silence unused parameter warning
+    free(user_input);
+    exit(0);
 }
 
 /**
