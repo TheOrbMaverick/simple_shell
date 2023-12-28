@@ -91,7 +91,7 @@ void cmd_exe(char *user_input, char *argv[], char **env)
 			exit(127);
 		}
 	}
-	
+
 	else
 	{
 		wait(&status);
@@ -141,6 +141,7 @@ int builtin(char **args, int num_of_args, char *user_input, char **env)
 {
 	if (strcmp(args[0], "exit") == 0)
 	{
+		exit (1);
 		return (exit_shell(args, user_input));
 	}
 	else if (strcmp(args[0], "cd") == 0)
