@@ -1,38 +1,6 @@
 #include "shell.h"
 
 /**
- * builtin - Handle all the built-in commands
- * @args: Arguments to the built-in commands
- * @num_of_args: Number of arguments
- * @user_input: The user_input command
- * @env: The environment variables
- *
- * Return: 1 if successful, 0 if unsuccessful, -1 if the command is "exit"
- */
-
-int builtin(char **args, int num_of_args, char *user_input, char **env)
-{
-	if (strcmp(args[0], "exit") == 0)
-	{
-		exit_shell(args, user_input);
-		return (-1);
-	}
-	else if (strcmp(args[0], "cd") == 0)
-	{
-		change_directory(args, num_of_args);
-		return (1);
-	}
-	else if (strcmp(args[0], "env") == 0)
-	{
-		env_print(env);
-		return (1);
-	}
-
-	return (0);
-}
-
-
-/**
   * env_print - Prints the environment variables
   * @env: Arguments
   */
@@ -70,9 +38,30 @@ void exit_handler(char *user_input, int exit_stat)
 
 int exit_shell(char **args, char *user_input)
 {
-	(void)args;
-    free(user_input);
-    exit(0);
+	char *status_str;
+	int exit_stat, i;
+
+	if (args[1] != NULL)
+	{
+		exit_stat = 0;
+		status_str = args[1];
+
+		for (i = 0; status_str[i] != '\0'; i++)
+		{
+			if (status_str[i] < '0' || status_str[i] > '9')
+			{
+				exit_handler(user_input, 2);
+				return (1);
+			}
+			exit_stat = exit_stat * 10 + (status_str[i] - '0');
+		}
+		exit_handler(user_input, exit_stat);
+	}
+	else
+	{
+		exit_handler(user_input, 127);
+	}
+	return (1);
 }
 
 /**
