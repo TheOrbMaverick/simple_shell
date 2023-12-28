@@ -36,13 +36,11 @@ void exit_handler(char *user_input, int exit_stat)
   * Return: Status of exit, 1 if otherwise
   */
 
-int exit_shell(char **args, char *user_input)
+void exit_shell(char **args, char *user_input)
 {
 	(void)args;
 	free(user_input);
 	exit(0);
-
-	return (0);
 }
 
 /**

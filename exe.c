@@ -142,6 +142,7 @@ int builtin(char **args, int num_of_args, char *user_input, char **env)
 	if (strcmp(args[0], "exit") == 0)
 	{
 		exit_shell(args, user_input);
+		/* this return will never run */
 		return (-1);
 	}
 	else if (strcmp(args[0], "cd") == 0)
