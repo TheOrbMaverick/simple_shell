@@ -38,7 +38,7 @@ void exit_handler(char *user_input, int exit_stat)
 
 int exit_shell(char **args, char *user_input)
 {
-	(void)args; // Silence unused parameter warning
+	(void)args;
 	free(user_input);
 	exit(0);
 }
