@@ -29,6 +29,8 @@ void change_directory(char **args, int num_of_args);
 void exit_handler(char *user_input, int exit_stat);
 void exit_shell(char **args, char *user_input);
 
+ssize_t my_getline(char **lineptr, size_t *n, FILE *stream);
+
 /* Handle various symbols */
 char *comments_handler(char *user_input);
 #endif /* SHELL_H */
