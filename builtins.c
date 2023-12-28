@@ -1,6 +1,38 @@
 #include "shell.h"
 
 /**
+ * builtin - Handle all the built-in commands
+ * @args: Arguments to the built-in commands
+ * @num_of_args: Number of arguments
+ * @user_input: The user_input command
+ * @env: The environment variables
+ *
+ * Return: 1 if successful, 0 if unsuccessful, -1 if the command is "exit"
+ */
+
+int builtin(char **args, int num_of_args, char *user_input, char **env)
+{
+	if (strcmp(args[0], "exit") == 0)
+	{
+		exit_shell(args, user_input);
+		return (-1);
+	}
+	else if (strcmp(args[0], "cd") == 0)
+	{
+		change_directory(args, num_of_args);
+		return (1);
+	}
+	else if (strcmp(args[0], "env") == 0)
+	{
+		env_print(env);
+		return (1);
+	}
+
+	return (0);
+}
+
+
+/**
   * env_print - Prints the environment variables
   * @env: Arguments
   */
@@ -81,37 +113,4 @@ void change_directory(char **args, int num_of_args)
 		if (chdir(args[1]) != 0)
 			perror("cd");
 	}
-}
-
-
-/**
- * builtin - Handle all the built-in commands
- * @args: Arguments to the built-in commands
- * @num_of_args: Number of arguments
- * @user_input: The user_input command
- * @env: The environment variables
- *
- * Return: 1 if successful, 0 if unsuccessful, -1 if the command is "exit"
- */
-
-int builtin(char **args, int num_of_args, char *user_input, char **env)
-{
-	if (strcmp(args[0], "exit") == 0)
-	{
-		exit_shell(args, user_input);
-		// The following line won't be reached, but added for clarity
-		return (-1);
-	}
-	else if (strcmp(args[0], "cd") == 0)
-	{
-		change_directory(args, num_of_args);
-		return (1);
-	}
-	else if (strcmp(args[0], "env") == 0)
-	{
-		env_print(env);
-		return (1);
-	}
-
-	return 0;
 }
