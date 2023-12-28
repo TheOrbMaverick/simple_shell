@@ -41,6 +41,8 @@ int exit_shell(char **args, char *user_input)
 	(void)args;
 	free(user_input);
 	exit(0);
+
+	return (1);
 }
 
 /**
