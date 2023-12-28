@@ -38,7 +38,7 @@ void exit_handler(char *user_input, int exit_stat)
 
 void exit_shell(char **args, char *user_input)
 {
-	free(args);
+	(void)args;
 	free(user_input);
 	exit(0);
 }
