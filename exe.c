@@ -59,7 +59,19 @@ void cmd_exe(char *user_input, char *argv[], char **env)
 		return;
 	if (builtin(args, num_of_args, user_input, env) == 1)
 		return;
+
 	path = file_path(args[0]);
+
+	if (path == NULL)
+	{
+		/* Command not found in PATH */
+
+		write(2, shell_name, strlen(shell_name));
+		write(2, ": 1: ", 5);
+		write(2, args[0], strlen(args[0]));
+		write(2, ": not found\n", 12);
+		return;
+	}
 
 	child_pid = fork();
 
@@ -67,6 +79,7 @@ void cmd_exe(char *user_input, char *argv[], char **env)
 	{
 		perror("Error: Failed to create");
 		free(user_input);
+		free(path);
 		exit(1);
 	}
 
@@ -74,15 +87,15 @@ void cmd_exe(char *user_input, char *argv[], char **env)
 	{
 		if (execve(path, args, NULL) == -1)
 		{
-			write(2, shell_name, strlen(shell_name));
-			write(2, ": 1: ", 5);
-			write(2, args[0], strlen(args[0]));
-			write(2, ": not found\n", 12);
+			perror("execve");
 			exit(127);
 		}
 	}
+	
 	else
+	{
 		wait(&status);
+	}
 
 	free(path);
 }
