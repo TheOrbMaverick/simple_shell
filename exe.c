@@ -6,8 +6,7 @@
 
 void user_prompt(void)
 {
-	if (isatty(STDIN_FILENO))
-		write(STDOUT_FILENO, "MyShell$ ", 9);
+	write(STDOUT_FILENO, "MyShell$ ", 9);
 }
 
 /**
