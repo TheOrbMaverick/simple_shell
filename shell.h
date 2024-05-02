@@ -20,9 +20,6 @@ char *user_input_reader(void);
 void user_prompt(void);
 int tokenizer(char *user_input, char *args[]);
 
-/* Custom getline*/
-ssize_t custom_getline(char **lineptr, size_t *n, FILE *stream);
-
 /* Built in Functions */
 int builtin(char **args,
 		int num_of_args, char *user_input,
