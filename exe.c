@@ -24,7 +24,7 @@ char *user_input_reader(void)
 
 	temp_input_storage = NULL;
 	buf_size = 0;
-	nread = custom_getline(&temp_input_storage, &buf_size, stdin);
+	nread = getline(&temp_input_storage, &buf_size, stdin);
 
 	if (nread == -1)
 	{
