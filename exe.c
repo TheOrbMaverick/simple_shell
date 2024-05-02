@@ -155,7 +155,7 @@ int builtin(char **args, int num_of_args, char *user_input, char **env)
 		env_print(env);
 		return (1);
 	}
-	else if (strcmp(args[0], "ls") == 0 && num_of_args == 2 && strcmp(args[1], "-l") == 0)
+	else if (strcmp(args[0], "ls") == 0 && strcmp(args[1], "-l") == 0)
 	{
         // Execute ls -l
         pid_t child_pid = fork();
