@@ -172,6 +172,7 @@ int builtin(char **args, int num_of_args, char *user_input, char **env)
             wait(NULL);
             return 1;
         }
+	}
 
 	return (0);
 }
