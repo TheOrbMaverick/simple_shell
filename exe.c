@@ -155,6 +155,11 @@ int builtin(char **args, int num_of_args, char *user_input, char **env)
 		env_print(env);
 		return (1);
 	}
+	else if (strcmp(args[0], "ls") == 0 && strcmp(args[1], "-l") == 0)
+	{
+        ls_l_command();
+        return 1;
+    }
 
 	return (0);
 }

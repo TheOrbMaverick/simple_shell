@@ -1,4 +1,7 @@
 #include "shell.h"
+#include <dirent.h>
+#include <sys/stat.h>
+#include <string.h>
 
 /**
   * env_print - Prints the environment variables
@@ -81,4 +84,45 @@ void change_directory(char **args, int num_of_args)
 		if (chdir(args[1]) != 0)
 			perror("cd");
 	}
+}
+
+/**
+ * Print detailed information about each file in
+ * the current directory.
+ * Prints permissions, number of hard links, and file name.
+ */
+
+void ls_l_command() {
+    struct stat file_stat;
+    DIR *dir;
+    struct dirent *entry;
+
+    dir = opendir(".");
+    if (dir == NULL) {
+        perror("Error");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (stat(entry->d_name, &file_stat) < 0) {
+            perror("Error");
+            exit(EXIT_FAILURE);
+        }
+
+        printf((S_ISDIR(file_stat.st_mode)) ? "d" : "-");
+        printf((file_stat.st_mode & S_IRUSR) ? "r" : "-");
+        printf((file_stat.st_mode & S_IWUSR) ? "w" : "-");
+        printf((file_stat.st_mode & S_IXUSR) ? "x" : "-");
+        printf((file_stat.st_mode & S_IRGRP) ? "r" : "-");
+        printf((file_stat.st_mode & S_IWGRP) ? "w" : "-");
+        printf((file_stat.st_mode & S_IXGRP) ? "x" : "-");
+        printf((file_stat.st_mode & S_IROTH) ? "r" : "-");
+        printf((file_stat.st_mode & S_IWOTH) ? "w" : "-");
+        printf((file_stat.st_mode & S_IXOTH) ? "x " : "- ");
+        printf("%ld ", file_stat.st_nlink);
+        printf("%s ", entry->d_name);
+        printf("\n");
+    }
+
+    closedir(dir);
 }
