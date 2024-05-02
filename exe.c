@@ -159,15 +159,20 @@ int builtin(char **args, int num_of_args, char *user_input, char **env)
 	{
         // Execute ls -l
         pid_t child_pid = fork();
-        if (child_pid == -1) {
+        if (child_pid == -1)
+		{
             perror("Error: Failed to create child process");
             return 1;
-        } else if (child_pid == 0) {
+        }
+		else if (child_pid == 0)
+		{
             // Child process
             execlp("ls", "ls", "-l", NULL);
             perror("Error: exec failed");
             exit(1);
-        } else {
+        }
+		else
+		{
             // Parent process
             wait(NULL);
             return 1;
