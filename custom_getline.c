@@ -8,7 +8,7 @@ ssize_t custom_getline(
     char ** __restrict __linep, size_t * __restrict __linecapp, FILE * __restrict __stream)
     {
     if (__linep == NULL || __linecapp == NULL || __stream == NULL) {
-        return -1; // Invalid arguments
+        return -1;
     }
 
     char *line = *__linep;
@@ -17,10 +17,10 @@ ssize_t custom_getline(
     int c;
 
     if (line == NULL || linecap == 0) {
-        linecap = 128; // Initial buffer size
+        linecap = 128;
         line = malloc(linecap);
         if (line == NULL) {
-            return -1; // Allocation failure
+            return -1;
         }
     }
 
@@ -29,24 +29,24 @@ ssize_t custom_getline(
             size_t newcap = linecap * 2;
             char *newline = realloc(line, newcap);
             if (newline == NULL) {
-                return -1; // Reallocation failure
+                return -1;
             }
             line = newline;
             linecap = newcap;
         }
         line[linelen++] = c;
         if (c == '\n') {
-            break; // End of line
+            break;
         }
     }
 
     if (linelen == 0 || ferror(__stream)) {
         free(line);
-        return -1; // Error or end of file
+        return -1;
     }
 
     line[linelen] = '\0';
     *__linep = line;
     *__linecapp = linecap;
-    return linelen; // Return length of the line
+    return linelen;
 }
